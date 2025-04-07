@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <meta name="color-scheme" content="light dark">
+    <title>Explore Mother's Day Bundles!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        /* Basic Reset */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; line-height: 1.7; color: #333; background-color: #fff; }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- Header/Hero Section --- */
+        .hero { background: linear-gradient(135deg, #fce4ec, #f8bbd0); padding: 60px 20px 40px; text-align: center; border-bottom: 4px solid #E85076; }
+        .hero h1 { font-family: 'Pacifico', cursive; font-size: 3rem; color: #E85076; margin-bottom: 15px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .hero p.subtitle { font-size: 1.2rem; color: #555; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+        /* --- Button Styles --- */
+        .cta-button { display: inline-block; background-color: #E85076; color: #fff; padding: 12px 25px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 1.1rem; transition: background-color 0.3s ease, transform 0.2s ease; margin: 5px; border: none; cursor: pointer; }
+        .cta-button:hover { background-color: #d81b60; transform: translateY(-2px); }
+        .cta-button.secondary { background-color: #fff; color: #E85076; border: 2px solid #E85076; }
+        .cta-button.secondary:hover { background-color: #fce4ec; color: #d81b60; border-color: #d81b60; }
+        /* Style for temporarily disabled links */
+        a.cta-button[href="#"] {
+            /* Optional: make it look slightly disabled */
+            /* background-color: #f0f0f0; */
+            /* color: #aaa; */
+            /* border-color: #ccc; */
+            /* cursor: not-allowed; */
+        }
+
+        /* --- Feature Section --- */
+        .features { padding: 50px 0; text-align: center; }
+        .features h2 { color: #4B0082; margin-bottom: 20px; font-size: 1.8rem; }
+        .features p { max-width: 650px; margin: 0 auto 15px; color: #444; }
+
+        /* --- Product Carousel Section --- */
+        .product-showcase { padding: 40px 0; background-color: #fdf6f8; text-align: center; }
+        .product-showcase h3 { color: #6a1b9a; margin-bottom: 25px; font-size: 1.5rem; }
+        .promo-carousel-container { max-width: 700px; margin: 0 auto; position: relative; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; }
+        .promo-carousel-slides { display: flex; transition: transform 0.5s ease-in-out; background-color: #f0f0f0; }
+        .promo-slide { flex: 0 0 100%; min-width: 100%; padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .promo-slide img, .promo-slide video { display: block; max-width: 100%; max-height: 400px; height: auto; object-fit: contain; border-radius: 5px; }
+        .promo-carousel-btn { position: absolute; top: 45%; transform: translateY(-50%); background-color: rgba(0, 0, 0, 0.4); color: white; border: none; padding: 10px 15px; font-size: 24px; font-weight: bold; cursor: pointer; border-radius: 5px; user-select: none; transition: background-color 0.2s ease; z-index: 5; }
+        .promo-carousel-btn:hover { background-color: rgba(0, 0, 0, 0.7); }
+        .promo-prev-btn { left: 10px; }
+        .promo-next-btn { right: 10px; }
+        .slide-description { margin-top: 12px; padding: 10px 15px 10px 25px; font-size: 0.95em; color: #4a4a4a; line-height: 1.5; text-align: left; min-height: 3em; border-left: 4px solid #E85076; background-color: #fdf6f8; width: 100%; border-radius: 0 5px 5px 0; }
+
+        /* --- Final CTA Section --- */
+        .cta-final { padding: 50px 0; text-align: center; }
+        .cta-final h2 { color: #4B0082; margin-bottom: 25px; }
+
+        /* --- Footer --- */
+        footer { text-align: center; padding: 20px; margin-top: 30px; background-color: #f8f9fa; color: #6c757d; font-size: 0.9rem; }
+        footer p { margin-bottom: 5px; }
+        .hashtags { font-size: 0.8em; color: #aaa; word-spacing: 5px; }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; } .hero p.subtitle { font-size: 1.1rem; }
+            .features h2 { font-size: 1.6rem; } .product-showcase h3 { font-size: 1.3rem; }
+            .promo-slide img, .promo-slide video { max-height: 300px; }
+        }
+        @media (max-width: 480px) {
+            .hero { padding: 40px 15px 30px; } .hero h1 { font-size: 2rem; } .hero p.subtitle { font-size: 1rem; }
+            .cta-button { font-size: 1rem; padding: 10px 20px; width: 80%; margin-bottom: 10px; }
+            .features, .product-showcase, .cta-final { padding: 30px 0; }
+            .promo-slide img, .promo-slide video { max-height: 250px; }
+            .promo-carousel-btn { font-size: 18px; padding: 6px 10px; top: 40%; }
+            .promo-prev-btn { left: 5px; } .promo-next-btn { right: 5px; }
+            .slide-description { font-size: 0.9em; min-height: 2.7em; }
+        }
+
+        /* --- Dark Mode Styles --- */
+        @media (prefers-color-scheme: dark) {
+            body { background-color: #1f1f1f; color: #e0e0e0; }
+            .hero { background: linear-gradient(135deg, #4a148c, #6a1b9a); border-bottom-color: #ab47bc; }
+            .hero h1 { color: #f8bbd0; }
+            .hero p.subtitle { color: #c5cae9; }
+            .features h2 { color: #ce93d8; }
+            .features p { color: #bdbdbd; }
+            .product-showcase { background-color: #2c2c2c; }
+            .product-showcase h3 { color: #e1bee7; }
+            .promo-carousel-container { background-color: #333; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
+            .promo-carousel-slides { background-color: #424242; }
+            .slide-description { color: #d0d0d0; border-left-color: #f8bbd0; background-color: #3a3a3a; }
+            .cta-final h2 { color: #ce93d8; }
+            .cta-button.secondary { background-color: #333; color: #f8bbd0; border-color: #f8bbd0; }
+            .cta-button.secondary:hover { background-color: #444; color: #fff; border-color: #fff; }
+            footer { background-color: #2a2a2a; color: #aaa; }
+            .hashtags { color: #777; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <div class="container">
+            <h1>See <span class="highlight">EXACTLY</span> what Mom gets! ✨</h1>
+            <p class="subtitle">Explore our new interactive Mother's Day Bundles site and discover the perfect gift with confidence.</p>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="cta-button" title="Main Bundle Site Coming Soon! | Explore Bundles Now!">Main Bundle Site Coming Soon!</a>
+        </div> <!-- replace href:# with link to site-->
+    </header>
+
+    <section class="features">
+        <div class="container">
+            <h2>Dive Into the Details</h2>
+            <p>Want to see the beautiful products, benefits, *and* ingredients before you buy for Mom? Our new website lets you dive deep!</p>
+            <p>Click the vibrant color-swatches for pop-up image carousels showcasing every detail of our exclusive <strong>Sleep Serenity</strong>, <strong>Pamper & Renew</strong>, and <strong>Skin Rejuvenation</strong> bundles.</p>
+        </div>
+    </section>
+
+    <section class="product-showcase">
+        <div class="container">
+            <h3>A Peek at the Goodies...</h3>
+            <div class="promo-carousel-container">
+                <div class="promo-carousel-slides" id="promoSlides">
+                     <div class="promo-slide"><img src="images/SleepGummies.jpg" alt="Sweet Dreams Supplement"><p class="slide-description">Enjoy delicious support for falling asleep faster. A tasty step towards sweet dreams.</p></div>
+                     <div class="promo-slide"><img src="images/masksamplepack.jpg" alt="Face Mask Sample Pack"><p class="slide-description">Indulge in an at-home spa experience with 5 unique mask samples. Purify, hydrate, brighten, and firm!</p></div>
+                     <div class="promo-slide"><img src="images/chamomileteapack.jpg" alt="Chamomile/Mint Tea Pack"><p class="slide-description">Unwind with a soothing cup of Chamomile or Mint tea. The perfect calming ritual before bed.</p></div>
+                     <div class="promo-slide"><img src="images/nourishbodywash.jpg" alt="Nourish Body Wash"><p class="slide-description">Gently cleanse and deeply nourish dry skin with creamy shea butter. Leaves skin smooth for 48 hours.</p></div>
+                     <div class="promo-slide"><img src="images/refreshexfolbodywash.jpg" alt="Exfoliating Body Wash"><p class="slide-description">Awaken your skin with gentle, natural exfoliants. Reveals smoother, brighter-looking skin instantly.</p></div>
+                     <div class="promo-slide"><img src="images/nourishbodylotion.jpg" alt="Body Lotion"><p class="slide-description">Lock in deep, 48-hour moisture without the greasy feel. Leaves skin incredibly smooth and nourished.</p></div>
+                     <div class="promo-slide"><img src="images/refreshbodymilk.jpg" alt="Body Milk"><p class="slide-description">Experience lightweight, refreshing hydration that absorbs instantly. Skin feels soft and awakened all day.</p></div>
+                     <div class="promo-slide"><img src="images/nourishhandcream.jpg" alt="Nourish Hand Cream"><p class="slide-description">Treat your hands to rich nourishment and lasting softness. A pampering essential for smooth, cared-for skin.</p></div>
+                     <div class="promo-slide"><img src="images/GlowBossCleanser.jpg" alt="Artistry Glow Bloss Cleanser"><p class ="slide-description">Reveal instantly smoother, brighter skin! This daily 2-in-1 wash cleanses away impurities while gently exfoliating dullness.</p></div>
+                     <div class="promo-slide"><img src="images/makeupremover.jpg" alt="Miscellanea Makeup Remover"><p class="slide-description">Effortlessly dissolve makeup while caring for your skin. Leaves your face feeling clean and refreshed.</p></div>
+                     <div class="promo-slide"><img src="images/lipplumper.jpg" alt="Artistry Lip Plumper"><p class="slide-description">Get instantly fuller-looking lips with a high-shine finish and gentle plumping sensation.</p></div>
+                     <div class="promo-slide"><img src="images/lipglowfuchsiabloom.jpg" alt="Artistry Lip Glow Example"><p class="slide-description">Add a touch of sheer, luminous color with a hydrating glossy finish. Keeps lips soft and radiant.</p></div>
+                     <div class="promo-slide"><img src="images/lipmattedragondelight.jpg" alt="Artistry Lip Matte Example"><p class="slide-description">Experience bold, full-coverage matte color that lasts. Stays comfortable without drying lips.</p></div>
+                    </div>
+                <button class="promo-carousel-btn promo-prev-btn" id="promoPrevBtn"><</button>
+                <button class="promo-carousel-btn promo-next-btn" id="promoNextBtn">></button>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-final">
+        <div class="container">
+            <h2>Ready to Spoil Mom?</h2>
+          <!--Link temp #--> 
+            <a href="#" target="_blank" rel="noopener noreferrer" class="cta-button" title="Main Bundle Site Coming Soon! | Experience the Details!">Main Bundle Site Coming Soon!</a>
+            <a href="https://www.instagram.com/wesleyworldwide17?igsh=MWQ1dWEybG95dzM3cA==" target="_blank" rel="noopener noreferrer" class="cta-button secondary">DM @WesleyWorldWide to Order!</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2024 WesleyWorldWide. Gifts curated with love.</p>
+            <p class="hashtags">#MothersDayBundles #InteractiveWebsite #GiftGuide #SeeInside #ProductDetails #SkincareGifts #BeautyGifts #Artistry</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slidesContainer = document.getElementById('promoSlides');
+            const slides = document.querySelectorAll('.promo-slide');
+            const prevBtn = document.getElementById('promoPrevBtn');
+            const nextBtn = document.getElementById('promoNextBtn');
+
+            let currentSlideIndex = 0;
+            const totalSlides = slides.length;
+
+            if (totalSlides <= 1) {
+                if(prevBtn) prevBtn.style.display = 'none';
+                if(nextBtn) nextBtn.style.display = 'none';
+                return;
+            }
+
+            function showSlide(index) {
+                currentSlideIndex = (index + totalSlides) % totalSlides; // Handles wrap around
+                const offset = -currentSlideIndex * 100;
+                slidesContainer.style.transform = `translateX(${offset}%)`;
+            }
+
+            showSlide(currentSlideIndex); // Initial display
+
+            if (nextBtn) { nextBtn.addEventListener('click', () => { showSlide(currentSlideIndex + 1); }); }
+            if (prevBtn) { prevBtn.addEventListener('click', () => { showSlide(currentSlideIndex - 1); }); }
+
+        });
+    </script>
+
+</body>
+</html>
