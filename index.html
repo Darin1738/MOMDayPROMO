@@ -1,190 +1,529 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> <!--website isnt building so pushing change to hopefulling force page creation-->
+<head>
+    <meta name="color-scheme" content="light dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
-    <meta name="color-scheme" content="light dark">
-    <title>Explore Mother's Day Bundles!</title>
+    <title>Mother's Day Bundles</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+
     <style>
-        /* Basic Reset */
+        .purchase-button {
+    margin-top: auto;
+    padding: 10px 16px;
+    background-color: #ffb3ba;
+    color: #000;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.purchase-button:hover {
+    background-color: #ff949e;
+}
+
+                /* --- Styles for Improved Mask List Readability --- */
+                .mask-list li p {
+            margin-top: 4px; /* Add a small space below the mask name */
+            padding-left: 0.5em; /* Indent the description slightly */
+            color: #444; /* Standard dark text color for description */
+            font-size: 0.95em; /* Slightly smaller font for description */
+        }
+
+        .mask-list .key-ingredient {
+            font-weight: 700; /* Make the ingredient bold */
+            color: inherit; /* Use the standard text color (not pink) */
+        }
+        /* --- MODAL & CAROUSEL STYLES --- */
+        .bundle-card {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: #ffffff; border: 1px solid #eee;
+            border-radius: 10px; padding: 25px;
+            text-align: center;
+            flex: 1; min-width: 280px; max-width: 350px;
+            display: flex; flex-direction: column;
+        }
+        .bundle-card:hover,
+        .bundle-card.is-active {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+        .bundle-card.sleep:hover, .bundle-card.sleep.is-active {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12), 0 0 18px 6px rgba(171, 71, 188, 0.5);
+        }
+        .bundle-card.bath:hover, .bundle-card.bath.is-active {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12), 0 0 18px 6px rgba(240, 98, 146, 0.5);
+        }
+        .bundle-card.skin:hover, .bundle-card.skin.is-active {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12), 0 0 18px 6px rgba(171, 71, 188, 0.5);
+        }
+        body.card-active .bundle-card:not(.is-active) {
+             opacity: 0.85;
+             filter: grayscale(30%);
+        }
+        .modal {
+            display: none; position: fixed; z-index: 1000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            overflow: auto; background-color: rgba(0,0,0,0.7);
+            padding-top: 50px;
+        }
+        .modal-content {
+            background-color: #fefefe; margin: 5% auto;
+            padding: 20px 25px 30px; border: 1px solid #888;
+            width: 90%; max-width: 650px;
+            border-radius: 10px; position: relative; text-align: center;
+        }
+        .close-button {
+            color: #aaa; position: absolute; top: 8px; right: 15px;
+            font-size: 32px; font-weight: bold; line-height: 1; cursor: pointer;
+        }
+        .close-button:hover, .close-button:focus { color: black; text-decoration: none; }
+        #modalColorName { margin-bottom: 15px; color: #4B0082; font-size: 1.4rem; }
+        .modal-carousel {
+            position: relative; margin-bottom: 10px; min-height: 300px;
+            display: flex; align-items: center; justify-content: center;
+            background-color: #f8f8f8; border-radius: 5px; overflow: hidden;
+        }
+        #carouselImage {
+            display: block; max-width: 100%; max-height: 450px;
+            height: auto; object-fit: contain; margin-left: auto; margin-right: auto;
+        }
+        .carousel-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.4); color: white; border: none;
+            padding: 10px 15px; font-size: 24px; font-weight: bold;
+            cursor: pointer; border-radius: 5px; user-select: none;
+            transition: background-color 0.2s ease; z-index: 10;
+        }
+        .carousel-btn:hover { background-color: rgba(0, 0, 0, 0.7); }
+        .prev-btn { left: 10px; }
+        .next-btn { right: 10px; }
+        .image-type-indicator {
+            margin-top: 10px; font-style: italic; color: #666;
+            font-size: 0.9em; min-height: 1.2em;
+        }
+        .modal-color-nav {
+            margin-top: 15px; padding-top: 15px;
+            border-top: 1px solid #eee;
+            display: flex; /* Use flex to initially hide/show buttons */
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-color-nav.hidden { display: none; }
+        .modal-color-nav.visible { display: flex; }
+        .color-nav-btn {
+            background-color: #f0f0f0; border: 1px solid #ccc; color: #555;
+            padding: 8px 15px; border-radius: 5px; cursor: pointer;
+            font-size: 0.9em; font-weight: 600;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .color-nav-btn:hover { background-color: #e0e0e0; color: #333; }
+        /* --- END MODAL STYLES --- */
+
+        /* --- Basic Reset & Body Styles --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Poppins', sans-serif; line-height: 1.7; color: #333; background-color: #fff; }
-        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
-
-        /* --- Header/Hero Section --- */
-        .hero { background: linear-gradient(135deg, #fce4ec, #f8bbd0); padding: 60px 20px 40px; text-align: center; border-bottom: 4px solid #E85076; }
-        .hero h1 { font-family: 'Pacifico', cursive; font-size: 3rem; color: #E85076; margin-bottom: 15px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
-        .hero p.subtitle { font-size: 1.2rem; color: #555; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
-
-        /* --- Button Styles --- */
-        .cta-button { display: inline-block; background-color: #E85076; color: #fff; padding: 12px 25px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 1.1rem; transition: background-color 0.3s ease, transform 0.2s ease; margin: 5px; border: none; cursor: pointer; }
-        .cta-button:hover { background-color: #d81b60; transform: translateY(-2px); }
-        .cta-button.secondary { background-color: #fff; color: #E85076; border: 2px solid #E85076; }
-        .cta-button.secondary:hover { background-color: #fce4ec; color: #d81b60; border-color: #d81b60; }
-        /* Style for temporarily disabled links */
-        a.cta-button[href="#"] {
-            /* Optional: make it look slightly disabled */
-            /* background-color: #f0f0f0; */
-            /* color: #aaa; */
-            /* border-color: #ccc; */
-            /* cursor: not-allowed; */
-        }
-
-        /* --- Feature Section --- */
-        .features { padding: 50px 0; text-align: center; }
-        .features h2 { color: #4B0082; margin-bottom: 20px; font-size: 1.8rem; }
-        .features p { max-width: 650px; margin: 0 auto 15px; color: #444; }
-
-        /* --- Product Carousel Section --- */
-        .product-showcase { padding: 40px 0; background-color: #fdf6f8; text-align: center; }
-        .product-showcase h3 { color: #6a1b9a; margin-bottom: 25px; font-size: 1.5rem; }
-        .promo-carousel-container { max-width: 700px; margin: 0 auto; position: relative; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; }
-        .promo-carousel-slides { display: flex; transition: transform 0.5s ease-in-out; background-color: #f0f0f0; }
-        .promo-slide { flex: 0 0 100%; min-width: 100%; padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .promo-slide img, .promo-slide video { display: block; max-width: 100%; max-height: 400px; height: auto; object-fit: contain; border-radius: 5px; }
-        .promo-carousel-btn { position: absolute; top: 45%; transform: translateY(-50%); background-color: rgba(0, 0, 0, 0.4); color: white; border: none; padding: 10px 15px; font-size: 24px; font-weight: bold; cursor: pointer; border-radius: 5px; user-select: none; transition: background-color 0.2s ease; z-index: 5; }
-        .promo-carousel-btn:hover { background-color: rgba(0, 0, 0, 0.7); }
-        .promo-prev-btn { left: 10px; }
-        .promo-next-btn { right: 10px; }
-        .slide-description { margin-top: 12px; padding: 10px 15px 10px 25px; font-size: 0.95em; color: #4a4a4a; line-height: 1.5; text-align: left; min-height: 3em; border-left: 4px solid #E85076; background-color: #fdf6f8; width: 100%; border-radius: 0 5px 5px 0; }
-
-        /* --- Final CTA Section --- */
-        .cta-final { padding: 50px 0; text-align: center; }
-        .cta-final h2 { color: #4B0082; margin-bottom: 25px; }
-
-        /* --- Footer --- */
-        footer { text-align: center; padding: 20px; margin-top: 30px; background-color: #f8f9fa; color: #6c757d; font-size: 0.9rem; }
-        footer p { margin-bottom: 5px; }
-        .hashtags { font-size: 0.8em; color: #aaa; word-spacing: 5px; }
-
-        /* --- Responsive --- */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; } .hero p.subtitle { font-size: 1.1rem; }
-            .features h2 { font-size: 1.6rem; } .product-showcase h3 { font-size: 1.3rem; }
-            .promo-slide img, .promo-slide video { max-height: 300px; }
-        }
-        @media (max-width: 480px) {
-            .hero { padding: 40px 15px 30px; } .hero h1 { font-size: 2rem; } .hero p.subtitle { font-size: 1rem; }
-            .cta-button { font-size: 1rem; padding: 10px 20px; width: 80%; margin-bottom: 10px; }
-            .features, .product-showcase, .cta-final { padding: 30px 0; }
-            .promo-slide img, .promo-slide video { max-height: 250px; }
-            .promo-carousel-btn { font-size: 18px; padding: 6px 10px; top: 40%; }
-            .promo-prev-btn { left: 5px; } .promo-next-btn { right: 5px; }
-            .slide-description { font-size: 0.9em; min-height: 2.7em; }
-        }
-
-        /* --- Dark Mode Styles --- */
+        body { font-family: 'Poppins', sans-serif; line-height: 1.6; color: #333; background-color: #fdf6f8; }
+        h1, h2, h3, h4, h5, h6 { margin-bottom: 0.75em; font-weight: 600; }
+        h1 { font-family: 'Pacifico', cursive; font-size: 3.5rem; color: #E85076; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); margin-top: 20px; }
+        h2 { font-size: 1.8rem; color: #4B0082; }
+        h3 { font-size: 1.3rem; color: #6a1b9a; border-bottom: 2px solid #f0e4f7; padding-bottom: 5px; margin-top: 15px; }
+        h3.for-you { margin-top: 25px; }
+        h4 { font-size: 1.1rem; color: #E85076; }
+        a { color: #E85076; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        ul { list-style: none; padding-left: 0; }
+        li { margin-bottom: 0.5em; padding-left: 1.2em; position: relative; }
+        .bundle-contents ul li::before { content: '♥'; color: #E85076; position: absolute; left: 0; top: 1px; font-size: 0.8em; }
+        .choice-item ul li::before, .mask-benefits-list li::before { content: '✓'; color: #4CAF50; font-weight: bold; position: absolute; left: 0; top: 1px; font-size: 0.8em; }
+        .main-header { text-align: center; padding: 40px 20px 30px; background-color: #fff; border-bottom: 3px solid #f8bbd0; position: relative; }
+        .tagline { font-size: 1.2rem; color: #555; margin-top: 10px; }
+        .tagline .highlight { color: #E85076; font-weight: 600; }
+        .instagram-cta { position: absolute; top: 15px; right: 15px; width: 130px; padding: 10px; background-color: #ffffff; border: 1px solid #ddd; border-radius: 8px; text-align: center; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); z-index: 10; }
+        .instagram-cta img { width: 60px; height: 60px; border-radius: 8px; margin-bottom: 5px; display: block; margin-left: auto; margin-right: auto; border: 1px solid #eee; }
+        .instagram-cta .handle { font-weight: 600; margin-bottom: 5px; font-size: 0.9em; color: #333; word-wrap: break-word; }
+        .instagram-cta .dm-note { font-size: 0.85em; color: #E85076; font-weight: 600; line-height: 1.3; }
+        .instagram-cta .dm-note a { color: #E85076; text-decoration: none; font-weight: 600; display: inline-block; transition: transform 0.2s ease-in-out, text-decoration 0.2s ease-in-out; }
+        .instagram-cta .dm-note a:hover { text-decoration: underline; transform: scale(1.08); }
+        .bundles-section { display: flex; flex-wrap: wrap; justify-content: space-around; padding: 40px 20px; gap: 30px; }
+        .bundle-card .bundle-contents { flex-grow: 1; }
+        .bundle-card .price { font-size: 2rem; font-weight: 700; color: #4B0082; margin-bottom: 20px; }
+        .bundle-contents { text-align: left; margin-top: 20px; }
+        .choices-section { padding: 30px 20px 50px; background-color: #fff; margin-top: 30px; border-top: 1px solid #eee; }
+        .choices-section > h2 { text-align: center; margin-bottom: 30px; color: #4B0082; }
+        .choice-category { margin-bottom: 40px; padding: 20px; background-color: #fdf6f8; border-radius: 8px; border: 1px solid #fce4ec; }
+        .choice-category h3 { text-align: center; border-bottom: none; margin-bottom: 20px; color: #6a1b9a; }
+        .choice-options { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .choice-item { background-color: #fff; border: 1px solid #eee; border-radius: 5px; padding: 15px; flex: 1; min-width: 250px; display: flex; flex-direction: column; }
+        .bodywash-options .choice-item, .bodylotion-options .choice-item { max-width: 45%; }
+        .choice-item h4 { margin-bottom: 10px; }
+        .choice-item > p { font-size: 0.95rem; margin-bottom: 10px; }
+        .choice-item h5 { font-size: 1rem; margin-top: 15px; margin-bottom: 8px; color: #333; }
+        .mask-list { list-style: none; padding-left: 0; }
+        .mask-list li { padding-left: 0; margin-bottom: 15px; }
+        .mask-list li::before { content: none; }
+        .mask-list strong { color: #E85076; display: block; margin-bottom: 3px; }
+        details { margin-top: auto; padding-top: 15px; }
+        summary { cursor: pointer; font-weight: 600; color: #E85076; display: inline-block; padding: 5px 0; }
+        .ingredients { font-size: 0.8rem; color: #666; margin-top: 10px; background-color: #fafafa; padding: 10px; border-radius: 4px; max-height: 150px; overflow-y: auto; line-height: 1.4; border: 1px solid #eee; }
+        .lip-options .choice-item { max-width: 30%; }
+        .color-swatches { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 5px 0; justify-content: center; }
+        .swatch { display: inline-block; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #ccc; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.2); transition: transform 0.1s ease-in-out; }
+        .swatch:hover { transform: scale(1.1); }
+        .swatch:active { transform: scale(0.95); }
+        .swatch.plumper { background-color: #fbe6db; } .swatch.fuchsia-bloom { background-color: #ef4f99; } .swatch.choco-bean { background-color: #78222f; } .swatch.kiss-me-cranberry { background-color: #db1a5d; } .swatch.desert-rose { background-color: #a94545; } .swatch.blushing-merlot { background-color: #b85b66; } .swatch.midnight-orchid { background-color: #651a31; } .swatch.pepper-pout { background-color: #cc0019; } .swatch.dragon-fruit { background-color: #d35b74; } .swatch.mocha-crush { background-color: #ac5d58; }
+        footer { text-align: center; padding: 20px; margin-top: 30px; background-color: #E85076; color: #fff; font-size: 0.9rem; }
+        @media (max-width: 992px) { .bodywash-options .choice-item, .bodylotion-options .choice-item, .lip-options .choice-item { max-width: 48%; } }
+        @media (max-width: 768px) { h1 { font-size: 2.8rem; margin-top: 5px; margin-bottom: 0.5em; } .main-header { padding-top: 80px; } .instagram-cta { top: 10px; right: 10px; width: 110px; padding: 8px; } .instagram-cta img { width: 50px; height: 50px; } .instagram-cta .handle { font-size: 0.8em; } .instagram-cta .dm-note { font-size: 0.75em; } .bundles-section { flex-direction: column; align-items: center; padding: 30px 15px; } .bundle-card { width: 90%; max-width: 400px; margin-bottom: 25px; } .bodywash-options .choice-item, .bodylotion-options .choice-item, .lip-options .choice-item { max-width: 100%; min-width: unset; } .choice-options { flex-direction: column; align-items: stretch; } .choice-item { min-width: unset; } .mask-details-flex { flex-direction: column; } }
+        @media (max-width: 480px) { h1 { font-size: 2.2rem; } body { font-size: 15px; } .main-header { padding: 70px 15px 20px; } .instagram-cta { top: 5px; right: 5px; width: 90px; padding: 5px; } .instagram-cta img { width: 40px; height: 40px; } .instagram-cta .handle { font-size: 0.7em; } .instagram-cta .dm-note { font-size: 0.7em; } .bundle-card { padding: 20px; } .choices-section { padding: 20px 15px 30px; } .lip-options .choice-item { max-width: 100%; min-width: unset; } }
+        @media (max-width: 480px) { .modal-color-nav { margin-top: 10px; padding-top: 10px; } .color-nav-btn { font-size: 0.8em; padding: 6px 10px; } }
+    
+                       /* --- Dark Mode Styles for index.html --- */
         @media (prefers-color-scheme: dark) {
             body { background-color: #1f1f1f; color: #e0e0e0; }
-            .hero { background: linear-gradient(135deg, #4a148c, #6a1b9a); border-bottom-color: #ab47bc; }
-            .hero h1 { color: #f8bbd0; }
-            .hero p.subtitle { color: #c5cae9; }
-            .features h2 { color: #ce93d8; }
-            .features p { color: #bdbdbd; }
-            .product-showcase { background-color: #2c2c2c; }
-            .product-showcase h3 { color: #e1bee7; }
-            .promo-carousel-container { background-color: #333; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
-            .promo-carousel-slides { background-color: #424242; }
-            .slide-description { color: #d0d0d0; border-left-color: #f8bbd0; background-color: #3a3a3a; }
-            .cta-final h2 { color: #ce93d8; }
-            .cta-button.secondary { background-color: #333; color: #f8bbd0; border-color: #f8bbd0; }
-            .cta-button.secondary:hover { background-color: #444; color: #fff; border-color: #fff; }
-            footer { background-color: #2a2a2a; color: #aaa; }
-            .hashtags { color: #777; }
+            .main-header { background-color: #2a2a2a; border-bottom-color: #6a1b9a; }
+            .main-header h1 { color: #f8bbd0; }
+            .tagline { color: #bdbdbd; }
+            .tagline .highlight { color: #f8bbd0; }
+            .bundle-card { background-color: #333; border-color: #444; }
+            .bundle-card:hover, .bundle-card.is-active { box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); }
+            .bundle-card.sleep:hover, .bundle-card.sleep.is-active { box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), 0 0 20px 7px rgba(171, 71, 188, 0.6); }
+            .bundle-card.bath:hover, .bundle-card.bath.is-active { box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), 0 0 20px 7px rgba(240, 98, 146, 0.6); }
+            .bundle-card.skin:hover, .bundle-card.skin.is-active { box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), 0 0 20px 7px rgba(171, 71, 188, 0.6); }
+            body.card-active .bundle-card:not(.is-active) { opacity: 0.75; filter: grayscale(40%); }
+            .bundle-card h2 { color: #ce93d8; }
+            .bundle-card .price { color: #e1bee7; }
+            .bundle-card h3 { color: #d1c4e9; border-bottom-color: #5e35b1; }
+            .bundle-contents ul li { color: #ccc; }
+            .bundle-contents ul li::before { color: #f8bbd0; }
+            .choices-section { background-color: #2a2a2a; border-top-color: #444; }
+            .choices-section > h2 { color: #ce93d8; }
+            .choice-category { background-color: #333; border-color: #4a148c; }
+            .choice-category h3 { color: #e1bee7; }
+            .choice-item { background-color: #424242; border-color: #555; }
+            .choice-item h4 { color: #f8bbd0; }
+            .choice-item > p { color: #bdbdbd; }
+            .choice-item h5 { color: #e0e0e0; }
+            .choice-item ul li { color: #ccc; }
+            .choice-item ul li::before { color: #81c784; }
+            /* --- CORRECTED RULE --- */
+            .mask-list li p { color: #e0e0e0; } /* Make mask description text lighter in dark mode */
+            .mask-list strong { color: #f8bbd0; } /* Adjust mask list title */
+            summary { color: #f8bbd0; }
+            .ingredients { background-color: #3a3a3a; color: #bbb; border-color: #555; }
+            .swatch { border-color: #666; }
+            .modal-content { background-color: #333; border-color: #555; }
+            #modalColorName { color: #ce93d8; }
+            .modal-carousel { background-color: #424242; }
+            .close-button { color: #888; }
+            .close-button:hover { color: #eee; }
+            .image-type-indicator { color: #aaa; }
+            .color-nav-btn { background-color: #555; border-color: #777; color: #ddd; }
+            .color-nav-btn:hover { background-color: #666; color: #fff; }
+            .modal-color-nav { border-top-color: #555; }
+            footer { background-color: #6a1b9a; color: #e0e0e0; }
+            .instagram-cta { background-color: #424242; border-color: #666; box-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
+            .instagram-cta .handle { color: #eee; }
+            .instagram-cta .dm-note a { color: #f8bbd0; }
+            .instagram-cta img { border-color: #555; }
         }
+        /* --- End Dark Mode Styles --- */
     </style>
+
 </head>
 <body>
 
-    <header class="hero">
-        <div class="container">
-            <h1>See <span class="highlight">EXACTLY</span> what Mom gets! ✨</h1>
-            <p class="subtitle">Explore our new interactive Mother's Day Bundles site and discover the perfect gift with confidence.</p>
-            <a href="#" target="_blank" rel="noopener noreferrer" class="cta-button" title="Main Bundle Site Coming Soon! | Explore Bundles Now!">Main Bundle Site Coming Soon!</a>
-        </div> <!-- replace href:# with link to site-->
+    <header class="main-header">
+         <div class="instagram-cta">
+             <img src="WesleyWorldWidepfp.jpg" alt="WesleyWorldWide Instagram Profile Picture">
+             <p class="handle">@WesleyWorldWide</p>
+             <p class="dm-note">
+                 <a href="https://www.instagram.com/wesleyworldwide17?igsh=MWQ1dWEybG95dzM3cA==" target="_blank" rel="noopener noreferrer">DM to Order!</a>
+             </p>
+         </div>
+        <h1>Mother's Day Bundles</h1>
+        <p class="tagline">Because <span class="highlight">Mom deserves the best</span> — and so do <span class="highlight">you</span>!</p>
     </header>
 
-    <section class="features">
-        <div class="container">
-            <h2>Dive Into the Details</h2>
-            <p>Want to see the beautiful products, benefits, *and* ingredients before you buy for Mom? Our new website lets you dive deep!</p>
-            <p>Click the vibrant color-swatches for pop-up image carousels showcasing every detail of our exclusive <strong>Sleep Serenity</strong>, <strong>Pamper & Renew</strong>, and <strong>Skin Rejuvenation</strong> bundles.</p>
-        </div>
-    </section>
+    <main>
+        <section class="bundles-section">
+           
+             <article class="bundle-card sleep" data-checkout="https://buy.stripe.com/9AQ6q53qt4ER9c4cMM"><h2>Sleep Serenity</h2><p class="price">$45</p><div class="bundle-contents"><h3>For Mom:</h3><ul><li>Sweet Dreams - Sleep Gummies</li><li>Face Mask Samples</li></ul><h3 class="for-you">For You:</h3><ul><li>Chamomile/Mint Tea Pack (20 bags)</li></ul></div><button class ="purchase-button">Click to Purchase</button></article>
+             <article class="bundle-card bath" data-checkout="https://buy.stripe.com/eVa6q5bWZfjvewo6oq"><h2>Pamper & Renew</h2><p class="price">$55</p><div class="bundle-contents"><h3>For Mom:</h3><ul><li>Choice of Nourish or Exfoliating Body Wash</li><li>Choice of Body Lotion or Body Milk</li></ul><h3 class="for-you">For You:</h3><ul><li>Nourish Hand Cream</li></ul></div><button class ="purchase-button">Click to Purchase</button></article>
+             <article class="bundle-card skin" data-checkout="https://buy.stripe.com/cN2aGlgdf3ANcog6op"><h2>Skin Rejuvenation</h2><p class="price">$60</p><div class="bundle-contents"><h3>For Mom:</h3><ul><li>Face Mask Sample Pack (10 Samples)</li><li>Miscellanea Makeup Remover</li><li>Glow Boss Cleanser + Exfoliator</li></ul><h3 class="for-you">For You:</h3><ul><li>2x Choice of Light Up Lip Product</li></ul><button class ="purchase-button">Click to Purchase</button></div></article>
+        </section>
 
-    <section class="product-showcase">
-        <div class="container">
-            <h3>A Peek at the Goodies...</h3>
-            <div class="promo-carousel-container">
-                <div class="promo-carousel-slides" id="promoSlides">
-                     <div class="promo-slide"><img src="images/SleepGummies.jpg" alt="Sweet Dreams Supplement"><p class="slide-description">Enjoy delicious support for falling asleep faster. A tasty step towards sweet dreams.</p></div>
-                     <div class="promo-slide"><img src="images/masksamplepack.jpg" alt="Face Mask Sample Pack"><p class="slide-description">Indulge in an at-home spa experience with 5 unique mask samples. Purify, hydrate, brighten, and firm!</p></div>
-                     <div class="promo-slide"><img src="images/chamomileteapack.jpg" alt="Chamomile/Mint Tea Pack"><p class="slide-description">Unwind with a soothing cup of Chamomile or Mint tea. The perfect calming ritual before bed.</p></div>
-                     <div class="promo-slide"><img src="images/nourishbodywash.jpg" alt="Nourish Body Wash"><p class="slide-description">Gently cleanse and deeply nourish dry skin with creamy shea butter. Leaves skin smooth for 48 hours.</p></div>
-                     <div class="promo-slide"><img src="images/refreshexfolbodywash.jpg" alt="Exfoliating Body Wash"><p class="slide-description">Awaken your skin with gentle, natural exfoliants. Reveals smoother, brighter-looking skin instantly.</p></div>
-                     <div class="promo-slide"><img src="images/nourishbodylotion.jpg" alt="Body Lotion"><p class="slide-description">Lock in deep, 48-hour moisture without the greasy feel. Leaves skin incredibly smooth and nourished.</p></div>
-                     <div class="promo-slide"><img src="images/refreshbodymilk.jpg" alt="Body Milk"><p class="slide-description">Experience lightweight, refreshing hydration that absorbs instantly. Skin feels soft and awakened all day.</p></div>
-                     <div class="promo-slide"><img src="images/nourishhandcream.jpg" alt="Nourish Hand Cream"><p class="slide-description">Treat your hands to rich nourishment and lasting softness. A pampering essential for smooth, cared-for skin.</p></div>
-                     <div class="promo-slide"><img src="images/GlowBossCleanser.jpg" alt="Artistry Glow Bloss Cleanser"><p class ="slide-description">Reveal instantly smoother, brighter skin! This daily 2-in-1 wash cleanses away impurities while gently exfoliating dullness.</p></div>
-                     <div class="promo-slide"><img src="images/makeupremover.jpg" alt="Miscellanea Makeup Remover"><p class="slide-description">Effortlessly dissolve makeup while caring for your skin. Leaves your face feeling clean and refreshed.</p></div>
-                     <div class="promo-slide"><img src="images/lipplumper.jpg" alt="Artistry Lip Plumper"><p class="slide-description">Get instantly fuller-looking lips with a high-shine finish and gentle plumping sensation.</p></div>
-                     <div class="promo-slide"><img src="images/lipglowfuchsiabloom.jpg" alt="Artistry Lip Glow Example"><p class="slide-description">Add a touch of sheer, luminous color with a hydrating glossy finish. Keeps lips soft and radiant.</p></div>
-                     <div class="promo-slide"><img src="images/lipmattedragondelight.jpg" alt="Artistry Lip Matte Example"><p class="slide-description">Experience bold, full-coverage matte color that lasts. Stays comfortable without drying lips.</p></div>
+        <section class="choices-section">
+            <h2>Customize Your Bundle Choices</h2>
+
+           
+            <div class="choice-category">
+                <h3>Body Wash Options (for Pamper & Renew Bundle)</h3>
+                <div class="choice-options bodywash-options">
+                    <div class="choice-item">
+                        <h4>Nourish Body Wash (400 mL)</h4>
+                        <p><strong>Best For:</strong> Dry skin needing hydration and smoothness.</p>
+                        <p>A creamy body wash that gently cleanses and nourishes, leaving your skin feeling smooth and conditioned.</p>
+                        <h5>Reasons to love:</h5>
+                        <ul>
+                            <li>Formulated with <strong>shea butter</strong> for moisture</li>
+                            <li>Instantly nourishes dry skin</li>
+                            <li>Clinically proven <strong>48-hour</strong> moisturization</li>
+                            <li>Biodegradable formula, 30% recycled bottle</li>
+                            <li>Dermatologist & Allergy tested, Vegan</li>
+                            <li>No Sulfate Surfactants, Artificial Colorants, Mineral Oil, Phthalates, Parabens, Alcohol</li>
+                        </ul>
+                        <details>
+                            <summary>View Ingredients</summary>
+                            <p class="ingredients">Water/Aqua/Eau, Sodium C14-16 Olefin Sulfonate, Cocamidopropyl Hydroxysultaine, Glycol Distearate, Sodium Chloride, Sodium Lauroyl Lactylate, Sodium Benzoate, Fragrance/Parfum, Sodium Lauroyl Sarcosinate, Glycerin, Butyrospermum Parkii (Shea) Butter, Citric Acid, Guar Hydroxypropyltrimonium Chloride, Hydroxypropyl Methylcellulose, Salvia Hispanica Seed Oil, Polystyrene, Polyquaternium-7, Tetrasodium EDTA, Sodium Hydroxide, Phenoxyethanol, Butylene Glycol, Glycereth-26, Aloe Barbadensis Leaf Juice, Dextrin, C11-15 Pareth-40, Lecithin, C11-15 Pareth-7, Olea Europaea (Olive) Fruit Oil, Poloxamer 331, Ceramide NP, Propylene Glycol, Phytosphingosine, Beta-Sitosterol, Chlorphenesin, Hydrogenated Lecithin, PPG-12-Buteth-16, Perilla Ocymoides Leaf Extract, Bambusa Vulgaris Leaf Extract, Tocopherol, Helianthus Annuus (Sunflower) Seed Oil, Potassium Sorbate, Citronellol, Hexyl Cinnamal, Limonene, Linalool</p>
+                        </details>
                     </div>
-                <button class="promo-carousel-btn promo-prev-btn" id="promoPrevBtn"><</button>
-                <button class="promo-carousel-btn promo-next-btn" id="promoNextBtn">></button>
-            </div>
-        </div>
-    </section>
+                    <div class="choice-item">
+                        <h4>Exfoliating Body Wash (400 mL)</h4>
+                        <p><strong>Best For:</strong> Achieving revitalized, brighter-looking skin.</p>
+                        <p>A daily body cleanser that deeply cleans and lightly exfoliates, awakening skin to a revitalized and refreshed feeling.</p>
+                        <h5>Reasons to love:</h5>
+                        <ul>
+                            <li><strong>Plant-based exfoliants</strong> (walnut shells, apricot seeds, almonds)</li>
+                            <li>Jojoba beads for brighter-looking skin</li>
+                            <li>Suitable for all skin types, gentle for daily use</li>
+                            <li>Biodegradable formula, 30% recycled bottle</li>
+                            <li>Dermatologist & Allergy tested, Vegan</li>
+                             <li>No Sulfate Surfactants, Artificial Colorants, Mineral Oil, Phthalates, Parabens, Alcohol</li>
+                        </ul>
 
-    <section class="cta-final">
-        <div class="container">
-            <h2>Ready to Spoil Mom?</h2>
-          <!--Link temp #--> 
-            <a href="#" target="_blank" rel="noopener noreferrer" class="cta-button" title="Main Bundle Site Coming Soon! | Experience the Details!">Main Bundle Site Coming Soon!</a>
-            <a href="https://www.instagram.com/wesleyworldwide17?igsh=MWQ1dWEybG95dzM3cA==" target="_blank" rel="noopener noreferrer" class="cta-button secondary">DM @WesleyWorldWide to Order!</a>
-        </div>
-    </section>
+
+                         <details>
+                            <summary>View Ingredients</summary>
+                            <p class="ingredients">Water, Sodium C14-16 Olefin Sulfonate, Cocamidopropyl Hydroxysultaine, Acrylates Copolymer, Sodium Benzoate, Fragrance, Hydrogenated Castor Oil, Citric Acid, Glycerin, Glycereth-26, Sodium Chloride (CO), Butylene Glycol, Malpighia Emarginata (Acerola) Fruit Extract, Sodium Hydroxide, Polyquaternium-7, Tetrasodium EDTA, Hydrogenated Jojoba Oil, Sodium Hydroxide (CO), Juglans Regia (Walnut) Shell Powder, Prunus Armeniaca (Apricot) Seed Powder, Prunus Amygdalus Dulcis (Sweet Almond) Shell Powder, Tetrasodium EDTA (CO), Dextrin, Sodium Benzoate (CO), Phenoxyethanol (CO), Lecithin, Olea Europaea (Olive) Fruit Oil, Phenoxyethanol, PPG-12-Buteth-16, Ceramide NP, Aloe Barbadensis Leaf Juice, Maltodextrin, Phytosphingosine, Beta-Sitosterol, Chlorphenesin, Hydrogenated Lecithin, Perilla Ocymoides Leaf Extract, Bambusa Vulgaris Leaf Extract, Tocopherol (CO), Potassium Sorbate (CO).</p>
+                        </details>
+                    </div>
+                </div>
+            </div>
+
+            <div class="choice-category">
+                <h3>Body Lotion vs. Body Milk Options (for Pamper & Renew Bundle)</h3>
+                <div class="choice-options bodylotion-options">
+                    <div class="choice-item">
+                        <h4>g&h™ Nourish Body Lotion (400 mL)</h4>
+                        <p><strong>Best For:</strong> Deep nourishment with a non-greasy feel.</p>
+                        <p>A smooth body lotion that deeply nourishes and supports skin's moisture barrier.</p>
+                        <h5>Reasons to love:</h5>
+                        <ul>
+                            <li>Instantly boosts moisturization by <strong>173%</strong></li>
+                            <li>Clinically proven <strong>48-hour</strong> moisturization</li>
+                            <li>Non-greasy, non-sticky, absorbs quickly</li>
+                            <li>Formulated with shea butter for smoothness</li>
+                            <li>30% recycled bottle</li>
+                            <li>Dermatologist & Allergy tested, Vegan</li>
+                            <li>No Artificial Colorants, Mineral Oil, Phthalates, Parabens, Alcohol</li>
+                        </ul>
+                        <details>
+                            <summary>View Ingredients</summary>
+                            <p class="ingredients">Water, Butyrospermum Parkii (Shea) Butter, Glycerin, Petrolatum, Isopropyl Palmitate, Caprylic/Capric Triglyceride, C12-15 Alkyl Benzoate, Isononyl Isononanoate, Dimethicone, Polyacrylate-13, Fragrance, Phenoxyethanol, Stearyl Alcohol, Sorbitan Stearate, Glyceryl Stearate, PEG-100 Stearate, Cetyl Alcohol, Polyisobutene, Chlorphenesin, Behenyl Alcohol, Salvia Hispanica Seed Oil, Disodium EDTA, Water (CO), Polysorbate 20, Butylene Glycol, Lecithin, Olea Europaea (Olive) Fruit Oil, Ceramide NP, Phytosphingosine, Phenoxyethanol (CO), BHT (CO), Beta-Sitosterol, Hydrogenated Lecithin, Tocopherol (CO), Bambusa Vulgaris Leaf Extract, Helianthus Annuus (Sunflower) Seed Oil (CO).</p>
+                        </details>
+                    </div>
+                    <div class="choice-item">
+                        <h4>g&h™ Refresh Body Milk (400 mL)</h4>
+                        <p><strong>Best For:</strong> Lightweight hydration that absorbs quickly.</p>
+                        <p>A lightweight body milk that awakens skin and leaves it feeling soft and hydrated.</p>
+                        <h5>Reasons to love:</h5>
+                        <ul>
+                            <li>Locks in moisture for up to <strong>48 hours</strong></li>
+                            <li>Instantly boosts hydration by <strong>146%</strong></li>
+                            <li>Clinically proven 48-hour hydration</li>
+                            <li>Non-greasy, absorbs quickly</li>
+                            <li>30% recycled bottle</li>
+                            <li>Dermatologist & Allergy tested, Vegan</li>
+                            <li>No Artificial Colorants, Mineral Oil, Phthalates, Parabens, Alcohol</li>
+                        </ul>
+                        <details>
+                            <summary>View Ingredients</summary>
+                            <p class="ingredients">Water, Butyrospermum Parkii (Shea) Butter, Caprylic/Capric Triglyceride, Glycerin, Neopentyl Glycol Diheptanoate, Glyceryl Stearate, Dimethicone, PEG-100 Stearate, Phenoxyethanol, Cetyl Alcohol, Fragrance, Sodium Benzoate, Polyacrylate-13, Chlorphenesin, Butylene Glycol, Malpighia Emarginata (Acerola) Fruit Extract, Polyisobutene, Disodium EDTA, Xanthan Gum, Water (CO), Polysorbate 20, Phenoxyethanol (CO), Lecithin, Olea Europaea (Olive) Fruit Oil, Ceramide NP, Phytosphingosine, Beta-Sitosterol, Hydrogenated Lecithin, Bambusa Vulgaris Leaf Extract, Tocopherol (CO).</p>
+                        </details>
+                    </div>
+                </div>
+            </div>
+            
+
+            <div class="choice-category">
+                <h3>Face Mask Sample Pack Details (for Skin Rejuvenation Bundle)</h3>
+                 <p>This bundle includes a sample pack featuring 10 foils (8mL / 0.2 oz. each, 2 of each mask type) for a taste of an at-home spa experience.</p>
+                 <p><strong>Perfect for:</strong> Sampling new products or multi-masking to treat different skin concerns. All masks feature Nutrilite™-sourced botanicals, indulgent scents, textures, and colors.</p>
+                 <div class="mask-details-flex" style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;">
+                    <div style="flex: 1; min-width: 250px;">
+                         <h5>Products in this Sample Pack:</h5>
+                         <ul class="mask-list">
+                            <li>
+                                <strong>Artistry Signature Select Polishing Mask:</strong>
+                                <p>Natural sugar scrub with <span class="key-ingredient">black currant</span>. Leaves skin instantly softer, smoother, and glowing.</p>
+                            </li>
+                            <li>
+                                <strong>Artistry Signature Select Purifying Mask:</strong>
+                                <p>Dense French clay mask with <span class="key-ingredient">citrus extract</span>. Absorbs oil for a clean, fresh feel.</p>
+                            </li>
+                            <li>
+                                <strong>Artistry Signature Select Hydrating Mask:</strong>
+                                <p>Whipped souffle texture with <span class="key-ingredient">green tea</span>. Instantly moisturizes dry skin for a supple look.</p>
+                            </li>
+                            <li>
+                                <strong>Artistry Signature Select Brightening Mask:</strong>
+                                <p>Silky mousse with <span class="key-ingredient">white chia seeds</span>. Transforms dull skin into a radiant complexion.</p>
+                            </li>
+                            <li>
+                                <strong>Artistry Signature Select Firming Mask:</strong>
+                                <p>Honey-like gel with <span class="key-ingredient">pomegranate</span>. Helps skin look tighter and revitalized.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="flex: 1; min-width: 250px;">
+                        <h5>More reasons to love these masks:</h5>
+                        <ul class="mask-benefits-list">
+                            <li>Safe for all skin types</li>
+                            <li>Dermatologist-tested & Allergy-tested</li>
+                            <li>Formulated without parabens, sulfate surfactants, mineral oils, plastic microbeads, phthalates</li>
+                            <li>Luxurious textures without stickiness</li>
+                            <li>Creates a remarkable sensory experience</li>
+                            <li>Helps skin look & feel renewed, moisturized, brighter, and firmer</li>
+                         </ul>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
 
     <footer>
-        <div class="container">
-            <p>© 2024 WesleyWorldWide. Gifts curated with love.</p>
-            <p class="hashtags">#MothersDayBundles #InteractiveWebsite #GiftGuide #SeeInside #ProductDetails #SkincareGifts #BeautyGifts #Artistry</p>
-        </div>
+        <p>© 2025 WesleyWorldWide. Happy Mother's Day!</p>
     </footer>
+
+    <!-- The Updated Modal with Color Navigation -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">×</span>
+            <h4 id="modalColorName">Color Name</h4>
+            <div class="modal-carousel">
+                 <span class="carousel-btn prev-btn" id="prevBtn"><</span>
+                 <img id="carouselImage" src="" alt="Lip Product Image">
+                 <span class="carousel-btn next-btn" id="nextBtn">></span>
+            </div>
+             <p id="imageTypeIndicator" class="image-type-indicator"></p>
+             
+             <div class="modal-color-nav hidden"> 
+                 <button class="color-nav-btn prev-color-btn" id="prevColorBtn">« Prev Color</button>
+                 <button class="color-nav-btn next-color-btn" id="nextColorBtn">Next Color »</button>
+             </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const slidesContainer = document.getElementById('promoSlides');
-            const slides = document.querySelectorAll('.promo-slide');
-            const prevBtn = document.getElementById('promoPrevBtn');
-            const nextBtn = document.getElementById('promoNextBtn');
 
-            let currentSlideIndex = 0;
-            const totalSlides = slides.length;
+            // --- Data: Map swatch class names to image URLs and display names ---
+            const colorImageData = {
+                 'plumper': { name: 'Light Up Liquid Lip Plumper', images: ['LipPlump/lipplumper.jpg', 'LipPlump/lipplumpercolorstroke.jpg', 'LipPlump/lipplumoperReasonsToLove.jpg'], imageTypes: ['Product', 'Color Swatch', 'Reasons to Love']},
+                'fuchsia-bloom': { name: 'Glow: Fuchsia Bloom 105', images: ['LipGlow/FuchsiaBloom/LipGlowProduct.jpg', 'LipGlow/FuchsiaBloom/LipGlowColorStroke.jpg', 'LipGlow/FuchsiaBloom/LipGlowReasonToLove.jpg'], imageTypes: ['Product', 'Color Swatch', 'Reasons to Love']},
+                'choco-bean': { name: 'Glow: Choco Bean 104', images: ['LipGlow/ChocoBean/LipGlowProduct.jpg', 'LipGlow/ChocoBean/LipGlowColorStroke.jpg', 'LipGlow/ChocoBean/LipGlowReasonToLove.jpg'], imageTypes: ['Product', 'Color Swatch', 'Reasons to Love']},
+                'kiss-me-cranberry': { name: 'Glow: Kiss Me Cranberry 103', images: ['LipGlow/KissMeCranberry/LipGlowProduct.jpg', 'LipGlow/KissMeCranberry/LipGlowColorStroke.jpg', 'LipGlow/KissMeCranberry/LipGlowReasonToLove.jpg'], imageTypes: ['Product', 'Color Swatch', 'Reasons to Love']},
+                'desert-rose': { name: 'Glow: Desert Rose 102', images: ['LipGlow/DesertRose/LipGlowProduct.jpg', 'LipGlow/DesertRose/LipGlowColorStroke.jpg', 'LipGlow/DesertRose/LipGlowReasonToLove.jpg'], imageTypes: ['Product', 'Color Swatch', 'Reasons to Love']},
+                'blushing-merlot': { name: 'Matte: Blushing Merlot 206', images: ['LipMatte/BlushingMerlot/LipMatteProduct.jpg', 'LipMatte/BlushingMerlot/LipMatteColorStroke.jpg', 'LipMatte/BlushingMerlot/LipMatteReasonToLove.jpg'], imageTypes: ['Product', 'Color Swatch', 'Reasons to Love']},
+                'midnight-orchid': { name: 'Matte: Midnight Orchid 204', images: ['LipMatte/MidnightOrchid/LipMatteProduct.jpg', 'LipMatte/MidnightOrchid/LipMatteColorStroke.jpg', 'LipMatte/MidnightOrchid/LipMatteReasonToLove.jpg'], imageTypes: ['Product', 'Color Swatch', 'Reasons to Love']},
+                'pepper-pout': { name: 'Matte: Pepper Pout 203', images: ['LipMatte/PepperPout/LipMatteProduct.jpg', 'LipMatte/PepperPout/LipMatteColorStroke.jpg', 'LipMatte/PepperPout/LipMatteReasonToLove.jpg'], imageTypes: ['Product', 'Color Swatch', 'Reasons to Love']},
+                'dragon-fruit': { name: 'Matte: Dragon Fruit De-light 202', images: ['LipMatte/DragonFruitDeLight/LipMatteProduct.jpg', 'LipMatte/DragonFruitDeLight/LipMatteColorSTroke.jpg', 'LipMatte/DragonFruitDeLight/LipMatteReasonToLove.jpg'], imageTypes: ['Product', 'Color Swatch', 'Reasons to Love']},
+                'mocha-crush': { name: 'Matte: Mocha Crush 201', images: ['LipMatte/MochaCrush/LipMatteProduct.jpg', 'LipMatte/MochaCrush/LipMatteColorStroke.jpg', 'LipMatte/MochaCrush/LipProductReasonToLove.jpg'], imageTypes: ['Product', 'Color Swatch', 'Reasons to Love']}
+            };
+            const glowColorOrder = ['fuchsia-bloom', 'choco-bean', 'kiss-me-cranberry', 'desert-rose'];
+            const matteColorOrder = ['blushing-merlot', 'midnight-orchid', 'pepper-pout', 'dragon-fruit', 'mocha-crush'];
 
-            if (totalSlides <= 1) {
-                if(prevBtn) prevBtn.style.display = 'none';
-                if(nextBtn) nextBtn.style.display = 'none';
-                return;
+            const modal = document.getElementById('imageModal');
+            const modalColorName = document.getElementById('modalColorName');
+            const carouselImage = document.getElementById('carouselImage');
+            const imageTypeIndicator = document.getElementById('imageTypeIndicator');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const prevColorBtn = document.getElementById('prevColorBtn');
+            const nextColorBtn = document.getElementById('nextColorBtn');
+            const colorNavContainer = document.querySelector('.modal-color-nav');
+            const closeButton = modal.querySelector('.close-button');
+            const lipOptionsContainer = document.querySelector('.lip-options');
+
+            let currentImages = [], currentImageTypes = [], currentImageIndex = 0, currentSwatchKey = null, currentColorList = [];
+
+            function displayCurrentImage() {
+                if (currentImages.length > 0) {
+                    carouselImage.src = currentImages[currentImageIndex];
+                    carouselImage.alt = modalColorName.textContent + " - " + currentImageTypes[currentImageIndex];
+                    imageTypeIndicator.textContent = `${currentImageTypes[currentImageIndex]} (${currentImageIndex + 1}/${currentImages.length})`;
+                } else { carouselImage.src = ''; carouselImage.alt = 'No image available'; imageTypeIndicator.textContent = ''; }
             }
 
-            function showSlide(index) {
-                currentSlideIndex = (index + totalSlides) % totalSlides; // Handles wrap around
-                const offset = -currentSlideIndex * 100;
-                slidesContainer.style.transform = `translateX(${offset}%)`;
+            function openModal(swatchKey) {
+                const data = colorImageData[swatchKey];
+                if (!data || !data.images || data.images.length === 0) { console.error("Image data missing for swatch key:", swatchKey); return; }
+                currentSwatchKey = swatchKey;
+                modalColorName.textContent = data.name;
+                currentImages = data.images;
+                currentImageTypes = data.imageTypes;
+                currentImageIndex = 0;
+                if (glowColorOrder.includes(currentSwatchKey)) {
+                    currentColorList = glowColorOrder; colorNavContainer.classList.remove('hidden'); colorNavContainer.classList.add('visible');
+                } else if (matteColorOrder.includes(currentSwatchKey)) {
+                    currentColorList = matteColorOrder; colorNavContainer.classList.remove('hidden'); colorNavContainer.classList.add('visible');
+                } else {
+                    currentColorList = []; colorNavContainer.classList.add('hidden'); colorNavContainer.classList.remove('visible');
+                }
+                displayCurrentImage();
+                if(modal.style.display !== 'block') { modal.style.display = 'block'; }
             }
 
-            showSlide(currentSlideIndex); // Initial display
+            function closeModal() {
+                modal.style.display = 'none';
+                carouselImage.src = ''; currentImages = []; currentImageTypes = []; imageTypeIndicator.textContent = '';
+                currentSwatchKey = null; currentColorList = [];
+                colorNavContainer.classList.add('hidden'); colorNavContainer.classList.remove('visible');
+            }
 
-            if (nextBtn) { nextBtn.addEventListener('click', () => { showSlide(currentSlideIndex + 1); }); }
-            if (prevBtn) { prevBtn.addEventListener('click', () => { showSlide(currentSlideIndex - 1); }); }
+            function navigateColor(direction) {
+                if (!currentSwatchKey || currentColorList.length <= 1) return;
+                const currentIndex = currentColorList.indexOf(currentSwatchKey); if (currentIndex === -1) return;
+                let nextIndex;
+                if (direction === 'next') { nextIndex = (currentIndex + 1) % currentColorList.length; }
+                else { nextIndex = (currentIndex - 1 + currentColorList.length) % currentColorList.length; }
+                openModal(currentColorList[nextIndex]);
+            }
+
+            // --- Event Listeners ---
+            if (lipOptionsContainer) { lipOptionsContainer.addEventListener('click', function(event) { if (event.target.classList.contains('swatch')) { openModal(event.target.classList[1]); } }); }
+            if (nextBtn) { nextBtn.addEventListener('click', function() { if (currentImages.length > 0) { currentImageIndex = (currentImageIndex + 1) % currentImages.length; displayCurrentImage(); } }); }
+            if (prevBtn) { prevBtn.addEventListener('click', function() { if (currentImages.length > 0) { currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length; displayCurrentImage(); } }); }
+            if (nextColorBtn) { nextColorBtn.addEventListener('click', function() { navigateColor('next'); }); }
+            if (prevColorBtn) { prevColorBtn.addEventListener('click', function() { navigateColor('prev'); }); }
+            if (closeButton) { closeButton.addEventListener('click', closeModal); }
+            window.addEventListener('click', function(event) { if (event.target === modal) { closeModal(); } });
+            window.addEventListener('keydown', function(event) { if (modal.style.display === 'block') { if (event.key === 'Escape') { closeModal(); } else if (event.key === 'ArrowRight') { nextBtn.click(); } else if (event.key === 'ArrowLeft') { prevBtn.click(); } } });
+
+            // --- Bundle Card Click/Tap Highlight Logic ---
+            const bundleCards = document.querySelectorAll('.bundle-card');
+            const purchaseButtons = document.querySelectorAll('.purchase-button');
+purchaseButtons.forEach(button => {
+    button.addEventListener('click', function(event) {
+        event.stopPropagation(); // prevent card highlight toggle
+        const card = button.closest('.bundle-card');
+        const checkoutUrl = card.getAttribute('data-checkout');
+        if (checkoutUrl) {
+            window.open(checkoutUrl, '_blank'); // or use window.location.href = checkoutUrl for same-tab
+        }
+    });
+});
+            bundleCards.forEach(card => { card.addEventListener('click', function(event) { event.stopPropagation(); const wasActive = card.classList.contains('is-active'); bundleCards.forEach(c => c.classList.remove('is-active')); document.body.classList.remove('card-active'); if (!wasActive) { card.classList.add('is-active'); document.body.classList.add('card-active'); } }); });
+            document.body.addEventListener('click', function(event) { if (!event.target.closest('.bundle-card')) { bundleCards.forEach(c => c.classList.remove('is-active')); document.body.classList.remove('card-active'); } });
 
         });
+    </script>
     </script>
 
 </body>
